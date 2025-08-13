@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow Lite - Your Client-Side Task Manager</title>
+    <meta name="description" content="A production-ready task management application built with vanilla JavaScript">
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/utilities.css">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Theme Colors -->
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="msapplication-TileColor" content="#3b82f6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="TaskFlow Lite">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>✓</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='24' fill='%233b82f6'/><path d='M48 96l24 24 48-48' stroke='white' stroke-width='8' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header Section -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <h1 class="app-title">
+                        <span class="logo-icon">✓</span>
+                        TaskFlow Lite
+                    </h1>
+                    <p class="app-tagline">Your client-side task management solution</p>
+                </div>
+                
+                <div class="header-controls">
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                    
+                    <div class="stats-display">
+                        <span id="task-counter" class="task-counter">0 tasks</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Task Input Section -->
+            <section class="task-input-section">
+                <form id="task-form" class="task-form" novalidate>
+                    <div class="input-group">
+                        <label for="task-input" class="visually-hidden">Enter new task</label>
+                        <input 
+                            type="text" 
+                            id="task-input" 
+                            class="task-input" 
+                            placeholder="What needs to be done?"
+                            autocomplete="off"
+                            maxlength="200"
+                            required
+                            aria-describedby="input-error"
+                        >
+                        <button type="submit" class="add-btn" aria-label="Add new task">
+                            <span class="add-icon">+</span>
+                        </button>
+                    </div>
+                    <div id="input-error" class="error-message" role="alert" aria-live="polite"></div>
+                    <div class="input-footer">
+                        <small class="character-count">
+                            <span id="char-count">0</span>/200 characters
+                        </small>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Filter Controls -->
+            <section class="filter-section" role="tablist" aria-label="Task filters">
+                <button class="filter-btn active" data-filter="all" role="tab" aria-selected="true">
+                    All <span class="filter-count" id="all-count">0</span>
+                </button>
+                <button class="filter-btn" data-filter="active" role="tab" aria-selected="false">
+                    Active <span class="filter-count" id="active-count">0</span>
+                </button>
+                <button class="filter-btn" data-filter="completed" role="tab" aria-selected="false">
+                    Completed <span class="filter-count" id="completed-count">0</span>
+                </button>
+            </section>
+
+            <!-- Task List Section -->
+            <section class="task-list-section">
+                <ul id="task-list" class="task-list" role="list" aria-label="Task list">
+                    <!-- Tasks will be dynamically rendered here -->
+                </ul>
+                
+                <!-- Empty State -->
+                <div id="empty-state" class="empty-state hidden">
+                    <div class="empty-illustration">
+                        <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="60" cy="60" r="50" stroke="currentColor" stroke-width="2" fill="none" opacity="0.3"/>
+                            <path d="M40 60l10 10 20-20" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="empty-title">No tasks yet</h3>
+                    <p class="empty-description">Add your first task above to get started!</p>
+                </div>
+            </section>
+
+            <!-- Bulk Actions -->
+            <section class="bulk-actions" id="bulk-actions">
+                <div class="bulk-controls">
+                    <button id="select-all" class="bulk-btn">
+                        <span class="bulk-icon">☑</span>
+                        Select All
+                    </button>
+                    <button id="clear-completed" class="bulk-btn danger">
+                        <span class="bulk-icon">🗑</span>
+                        Clear Completed
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <div class="footer-content">
+                <p class="footer-text">
+                    Built with ❤️ using Vanilla JavaScript • 
+                    <a href="#" id="about-link" class="footer-link">About</a> • 
+                    <a href="https://github.com" class="footer-link" target="_blank" rel="noopener">GitHub</a>
+                </p>
+                <div class="footer-stats">
+                    <small>Data stored locally in your browser</small>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modal for confirmations -->
+    <div id="modal-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-content">
+            <h3 id="modal-title" class="modal-title"></h3>
+            <p id="modal-message" class="modal-message"></p>
+            <div class="modal-actions">
+                <button id="modal-cancel" class="modal-btn secondary">Cancel</button>
+                <button id="modal-confirm" class="modal-btn primary">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading indicator -->
+    <div id="loading" class="loading-indicator hidden">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Toast notifications -->
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <!-- Scripts -->
+    <script type="module" src="app.js"></script>
+    
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => console.log('SW registered:', registration))
+                    .catch(error => console.log('SW registration failed:', error));
+            });
+        }
+    </script>
+</body>
+</html>
