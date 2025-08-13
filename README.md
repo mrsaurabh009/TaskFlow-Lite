@@ -2,7 +2,7 @@
 
 > **Your client-side task management solution** - A production-ready task management application built with vanilla JavaScript.
 
-![TaskFlow Lite Screenshot](https://via.placeholder.com/800x400?text=TaskFlow+Lite+Screenshot)
+# [LIVE] [Click](https://mrsaurabh009.github.io/TaskFlow-Lite/)
 
 ## 🎯 Overview
 
