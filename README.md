@@ -410,6 +410,6 @@ Created as a demonstration of production-ready vanilla JavaScript development pr
 
 ---
 
-**Built with ❤️ using Vanilla JavaScript**
+**Built with ❤️ Saurabh Kumar using Vanilla JavaScript**
 
 *No frameworks, no dependencies, just modern web standards.*
